@@ -1,0 +1,10 @@
+IBM Quantum Computing,https://quantum.cloud.ibm.com/learning/en,
+PennyLane Learn Quantum Computing,https://pennylane.ai/qml,
+Qiskit Quantum Protocols and Quantum Algorithms,https://qiskit.org/textbook/ch-algorithms/index.html,
+Q-CTRL Learn Quantum Computing,https://q-ctrl.com/black-opal,
+Waterloo Institute of Quantum Computing,https://uwaterloo.ca/institute-for-quantum-computing/,
+IQM Academy Learn Quantum Computing,https://www.iqmacademy.com/,
+What is a Quantum Computer?,https://www.technologyreview.com/2019/01/29/66141/what-is-quantum-computing/,
+Basic quantum algorithms by Renato Portugal,https://arxiv.org/pdf/2201.10574.pdf,
+Noisy intermediate-scale quantum algorithms,https://arxiv.org/pdf/2101.08448.pdf,
+The Quantum Insider,https://thequantuminsider.com/

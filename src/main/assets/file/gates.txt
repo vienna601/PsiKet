@@ -1,0 +1,5 @@
+hadamard gate,assets/images/hadamard.png,sqrt2,0,sqrt2,0,sqrt2,0,-sqrt2,0,
+identity gate,assets/images/identity.png,1,0,0,0,0,0,1,0,
+pauli x gate,assets/images/pauliX.png,0,0,1,0,1,0,0,0,
+pauli y gate,assets/images/pauliY.png,0,0,0,-1,0,1,0,0,
+pauli z gate,assets/images/pauliZ.png,1,0,0,0,0,0,-1,0
