@@ -9,6 +9,11 @@ import javax.swing.JPanel;
 
 import model.Gate;
 
+/*
+ * This class is responsible for painting the base of the 
+ * circuit in the Circuit Frame. It draws and labels circuit lines
+ * needed.
+ */
 public class CircuitPanel extends JPanel{
 	public CircuitPanel() {
 	}

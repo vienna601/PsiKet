@@ -2,12 +2,16 @@ package model;
 
 import java.util.Arrays;
 
+/*
+ * This class models gates with a 2D complex number
+ * array as its matrix representation and information such as 
+ * its name and image path.
+ */
 public class Gate {
 	//fields
 	private String name;
 	private String imagePath;
 	private ComplexNumber[][] matrixRep;
-	private int qubitNum;
 	
 	//constructor
 	public Gate(String name, String imagePath, ComplexNumber[][] matrixRep) {
@@ -40,10 +44,6 @@ public class Gate {
 
 	public void setMatrixRep(ComplexNumber[][] matrixRep) {
 		this.matrixRep = matrixRep;
-	}
-
-	public int getQubitNum() {
-		return qubitNum;
 	}
 
 	//display contents

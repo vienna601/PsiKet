@@ -2,6 +2,12 @@ package model;
 
 import java.util.Random;
 
+/*
+ * This class models the qubit object with complex
+ * number amplitudes alpha and beta, a basis, and more.
+ * It contains utility methods such as inner product,
+ * measure, calculate probabilities, etc.
+ */
 public class Qubit implements StateInterface, VectorInterface{
 	//fields
 	private String id;

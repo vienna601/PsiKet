@@ -17,14 +17,39 @@ import javax.swing.JLabel;
 
 import controller.AssetsController;
 
-public class TitleFrame extends JFrame implements MouseListener{
+/*
+ * This program is responsible for configuring the layout
+ * of the starting screen as well as starting the background
+ * music.
+ */
+public class TitleFrame extends JFrame{
 	//declare components
 	private JLabel bgLabel;
 	private JLabel titleLabel;
 	private JLabel homeButton;
+	private boolean isDisposed = false;
 	//for keeping track of audio
-	private static boolean started = false;
+	private boolean started = false;
 	
+	//getters and setters
+	public JLabel getHomeButton() {
+		return homeButton;
+	}
+	public void setHomeButton(JLabel homeButton) {
+		this.homeButton = homeButton;
+	}
+	public boolean isStarted() {
+		return started;
+	}
+	public void setStarted(boolean started) {
+		this.started = started;
+	}
+	public boolean isDisposed() {
+		return isDisposed;
+	}
+	public void setDisposed(boolean isDisposed) {
+		this.isDisposed = isDisposed;
+	}
 	//constructor
 	public TitleFrame() {
 		//play music in the background
@@ -32,10 +57,10 @@ public class TitleFrame extends JFrame implements MouseListener{
 		//Source: https://www.geeksforgeeks.org/play-audio-file-using-java/
 		//check if the music is playing (since it will be looping,
 		//it should not be started a second time)
-		if (!started) {
+		if (!isStarted()) {
 			AudioInputStream audioInputStream;
 			try {
-				//
+				//get audio input stream
 				audioInputStream = AudioSystem.getAudioInputStream(
 						new File("src/main/assets/audio/startingMusic.wav").getAbsoluteFile());
 				Clip clip = AudioSystem.getClip();
@@ -46,15 +71,15 @@ public class TitleFrame extends JFrame implements MouseListener{
 				//volume-control-increase-or-decrease-in-java
 				FloatControl volume = (FloatControl)clip.getControl(
 						FloatControl.Type.MASTER_GAIN);
-				//reduce volume by 20 decibels
-				volume.setValue(-20.0f);
+				//reduce volume by 10 decibels
+				volume.setValue(-10.0f);
 				//start playing the clip
 				clip.start();
 				//loop the audio clip continuously
 				//since I want it to play in the background as long as 
 				//the game is still active
 				clip.loop(Clip.LOOP_CONTINUOUSLY);
-				started = true;
+				setStarted(true);
 			} //the catch prevents the program from being terminated even
 			//if there is an error
 			catch (Exception e) {
@@ -68,8 +93,6 @@ public class TitleFrame extends JFrame implements MouseListener{
 		homeButton = new JLabel(new ImageIcon("src/main/assets/images/nextButton.png"));
 		//add tooltip
 		homeButton.setToolTipText("Enter the tiny world!");
-		//add mouse listener
-		homeButton.addMouseListener(this);
 		//change the cursor to a hand cursor when the user hovers over the label
         //source: https://stackoverflow.com/questions/7359189/how-to-change-the-mouse-cursor-in-java
         homeButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -103,32 +126,11 @@ public class TitleFrame extends JFrame implements MouseListener{
         pack();
         setVisible(true);
 	}
-
+	
+	//dispose the frame
 	@Override
-	public void mouseClicked(MouseEvent e) {
-		//check if user wants to proceed to the next page
-		if((JLabel)e.getSource() == homeButton) {
-			//construct a home frame and dispose the current
-			new HomeFrame();
-			this.dispose();
-		}
+	public void dispose() {
+		super.dispose();
+		setDisposed(true);
 	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// unused method
-	}
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// unused method
-	}
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// unused method
-	}
-	@Override
-	public void mouseExited(MouseEvent e) {
-		//	unused method
-	}
-
 }

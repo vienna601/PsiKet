@@ -25,7 +25,7 @@ import model.Qubit;
 
 /*
  * This controller is responsible for helping load contents
- * such as custom fonts and saved circuits.
+ * such as gates and saved circuits.
  */
 
 public class AssetsController {

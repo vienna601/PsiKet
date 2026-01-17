@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Stack;
 
+/*
+ * This class models a circuit with an initial qubit state,
+ * a list of quantum gates, and more. It contains utility methods
+ * such as add/remove/move gate and clear circuit.
+ */
 public class Circuit {
 	//fields
 	private String name;

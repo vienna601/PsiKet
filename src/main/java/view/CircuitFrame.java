@@ -36,8 +36,15 @@ import model.Gate;
 import model.Qubit;
 import model.StateVector;
 
+/*
+ * This program is responsible for configuring the layout of
+ * the frame where the user can visualize quantum circuits. It
+ * contains features such as gate search and state measurement.
+ */
 public class CircuitFrame extends JFrame{
 	//declare components
+	//for checking if frame has been disposed
+	private boolean isDisposed = false;
 	private JLabel bgLabel;
 	//button tool bar at the top
 	private JToolBar buttonBar;
@@ -151,6 +158,12 @@ public class CircuitFrame extends JFrame{
 	}
 	public void setButtonBar(JToolBar buttonBar) {
 		this.buttonBar = buttonBar;
+	}
+	public boolean isDisposed() {
+		return isDisposed;
+	}
+	public void setDisposed(boolean isDisposed) {
+		this.isDisposed = isDisposed;
 	}
 
 	//method for initializing GUI components 
@@ -354,8 +367,10 @@ public class CircuitFrame extends JFrame{
         setVisible(true);
 	}
 	//dispose this frame
+	@Override
 	public void dispose() {
-		this.dispose();
+		super.dispose();
+		setDisposed(true);
 	}
 	
 	//add gates to the GUI JPanel

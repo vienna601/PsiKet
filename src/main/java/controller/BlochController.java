@@ -11,6 +11,15 @@ import javax.swing.JOptionPane;
 import view.BlochFrame;
 import view.HomeFrame;
 
+/*
+ * This program is responsible for controlling the components of
+ * the bloch sphere frame. It contains all the logic for actions
+ * such as customizing qubit positions by entering the angle and 
+ * selecting default states. It uses formulas (explained in comment 
+ * block under "else if((JButton)e.getSource() == getBlochFrame().
+ * getConfirmButton()) {") to calculate the spherical and cartesian 
+ * coordinates of qubits.
+ */
 public class BlochController implements MouseListener, MouseMotionListener{
 	//declare fields
 	private BlochFrame blochFrame;
@@ -24,12 +33,9 @@ public class BlochController implements MouseListener, MouseMotionListener{
 	public BlochFrame getBlochFrame() {
 		return blochFrame;
 	}
-
-
 	public void setBlochFrame() {
 		this.blochFrame = new BlochFrame();
 		//add mouse and mouse motion listeners to components
-		getBlochFrame().getHomeButton().addMouseListener(this);
 		getBlochFrame().getSpherePanel().addMouseListener(this);
 		getBlochFrame().getSpherePanel().addMouseMotionListener(this);
 		for(JLabel option : getBlochFrame().getOptions()) {
@@ -101,12 +107,6 @@ public class BlochController implements MouseListener, MouseMotionListener{
 		//check if the action source is an instance of JLabel 
 		//(avoid type cast error)
 		if(e.getSource() instanceof JLabel) {
-			//check if the user clicked the home button label
-			if((JLabel)e.getSource() == getBlochFrame().getHomeButton()) {
-				//open the home frame and dispose the current
-				new HomeFrame();
-				getBlochFrame().dispose();
-			}
 			//check if user clicked any of the default options
 			//- these points are on the ends of the axes
 			//Sources: 
@@ -114,7 +114,7 @@ public class BlochController implements MouseListener, MouseMotionListener{
 			//introduction-to-quantum-computing.html
 			//- https://quantum.cloud.ibm.com/learning/en/courses/
 			//general-formulation-of-quantum-information/density-matrices/bloch-sphere
-			else if((JLabel)e.getSource() == getBlochFrame().getOptions()[0]) {
+			if((JLabel)e.getSource() == getBlochFrame().getOptions()[0]) {
 				//user clicked computational basis
 				//update fields in sphere event listener to display
 				//tiny spheres representing the states

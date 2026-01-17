@@ -26,8 +26,14 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 
-public class ResourcesFrame extends JFrame implements MouseListener{
+/*
+ * This program is responsible for configuring the layout of the
+ * frame that displays useful links for quantum learners.
+ */
+public class ResourcesFrame extends JFrame{
 	//declare components
+	//check if frame disposed
+	private boolean isDisposed = false;
 	private ArrayList<JLabel> resourceLabels;
 	private ArrayList<String> URIList;
 	private JLabel bgLabel;
@@ -36,6 +42,37 @@ public class ResourcesFrame extends JFrame implements MouseListener{
 	private JScrollPane scroll;
 	private JLabel homeButton;
 	
+	//getters and setters for controller
+	public ArrayList<JLabel> getResourceLabels() {
+		return resourceLabels;
+	}
+
+	public void setResourceLabels(ArrayList<JLabel> resourceLabels) {
+		this.resourceLabels = resourceLabels;
+	}
+
+	public ArrayList<String> getURIList() {
+		return URIList;
+	}
+
+	public void setURIList(ArrayList<String> uRIList) {
+		URIList = uRIList;
+	}
+
+	public JLabel getHomeButton() {
+		return homeButton;
+	}
+
+	public void setHomeButton(JLabel homeButton) {
+		this.homeButton = homeButton;
+	}
+	public boolean isDisposed() {
+		return isDisposed;
+	}
+	public void setDisposed(boolean isDisposed) {
+		this.isDisposed = isDisposed;
+	}
+
 	//constructor
 	public ResourcesFrame() {
 		//create background and title label
@@ -46,8 +83,6 @@ public class ResourcesFrame extends JFrame implements MouseListener{
 		titleLabel.setOpaque(true);
 		//create home button label
 		homeButton = new JLabel(new ImageIcon("src/main/assets/images/homeButton.png"));
-		//add mouse listener and set cursor icon
-		homeButton.addMouseListener(this);
 		//change to a hand cursor when the user hovers over the label
         //source: https://stackoverflow.com/questions/7359189/how-to-
 		//change-the-mouse-cursor-in-java
@@ -80,9 +115,7 @@ public class ResourcesFrame extends JFrame implements MouseListener{
                 //change the cursor to a hand cursor when the user hovers over the label
                 //source: https://stackoverflow.com/questions/7359189/how-to-change-the-mouse-cursor-in-java
                 label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-                //add mouse listener to label for redirecting the user to the corresponding website
-                //(can't use action listener on JLabel)
-                label.addMouseListener(this);
+                
                 //add the new label to the array list
                 resourceLabels.add(label);
                 //add label to panel
@@ -124,63 +157,10 @@ public class ResourcesFrame extends JFrame implements MouseListener{
         pack();
         setVisible(true);
 	}
-	
-    //method for opening resource website on user's default browser
-    public static void openWebsite(URI uri) {
-        //determine whether desktop API is available for opening websites
-        //https://stackoverflow.com/questions/9977221/open-url-in-java-to-get-the-content
-        if (Desktop.isDesktopSupported()) {
-            //try catch structure for browsing uri
-            try {
-                //open the website using the desktop 
-                Desktop.getDesktop().browse(uri);
-            } 
-            catch (IOException e) {
-                e.printStackTrace(); 
-            }
-        } 
-    }
-
+	//dispose the frame
 	@Override
-	public void mouseClicked(MouseEvent e) {
-		//check if the user clicked the home button
-		if((JLabel)e.getSource() == homeButton) {
-			//open the home frame and dispose the current
-			new HomeFrame();
-			this.dispose();
-		}
-		//check if the user clicked any of the resource labels
-		else {
-			for(int i = 0; i < resourceLabels.size(); i++) {
-				//check if any of the labels were clicked
-				if((JLabel)e.getSource() == resourceLabels.get(i)) {
-					//try catch structure for browsing url
-	                try{
-	                    //open the corresponding website
-	                    openWebsite(new URI(URIList.get(i)));
-	                } catch (Exception ex){
-	                    ex.printStackTrace();
-	                }
-					
-				}
-			}
-		}
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-	}
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-	}
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-	}
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
+	public void dispose() {
+		super.dispose();
+		setDisposed(true);
 	}
 }

@@ -9,10 +9,11 @@ import view.TitleFrame;
  * Course Code: ICS4U1-01 Mr.Fernandes
  * Title: PsiKet
  * 
- * Description: This project is a quantum computing visualization tool 
- * aimed to help users gain a better understanding how qubits behave 
- * with quantum gates, which are fundamental operations, and how famous 
- * quantum algorithms such as Grover’s algorithm work behind the scenes. 
+ * Description: 
+ * This project is a quantum computing visualization tool aimed to help 
+ * intermediate quantum learners gain a better understanding how qubits 
+ * behave with quantum gates, which are fundamental operations, and how 
+ * famous quantum algorithms such as Grover’s algorithm work behind the scenes. 
  * It utilizes a sphere and circuit GUI to demonstrate the characteristics 
  * of qubits including superposition, as well as the effects of various 
  * gate operations on them. This application is unique because it links 
@@ -23,13 +24,32 @@ import view.TitleFrame;
  * different models of quantum computing.
  * 
  * Features:
- * - 
+ * - Background music
+ * - Custom cursor
+ * - 3D bloch sphere for visualizing qubit positions
+ * - Calculated cartesian and spherical coordinates
+ * - Default pairs of basis states that users can select
+ * - Custom angles that control positions of qubits on the bloch sphere
+ * - Searching and adding quantum gates to circuit
+ * - Modifying basis used in circuit
+ * - Calculating measurement probabilities and measuring superposed qubit
+ * - Saving current circuit set up
+ * - Importing saved circuits
+ * - Break down of Grover's Algorithm into major steps with video 
+ *   visualizations and explanations (Source: https://www.youtube.com/watch?v=RQWpF2Gb-gU)
+ * - Resources and helpful websites for the user to explore
  * 
  * Major Skills:
- * - 
+ * - Modular programming (OOP principles and class hierarchies)
+ * - Control structures
+ * - Decision structures
+ * - MCV file structure
+ * - Data structures (e.g. Tree map, Array lists, etc.)
+ * - Search algorithm
+ * - String manipulation
+ * 
  * Areas of Concern:
- * any notes to end users here (files, hardware, settings, imported APIs, instructions, etc.)
- * indicate incomplete or partial solutions (acknowledge errors)
+ * - Please download all assets, APIs, packages, etc.
  * 
  * Additional note:
  * - The project title is inspired by the greek alphabet character psi (ψ)
@@ -44,8 +64,8 @@ import view.TitleFrame;
 public class FSPApplication {
 	//main method
 	public static void main(String args[]) {
-		//new MainController();
-		new TitleFrame();
+		//create instance of main controller
+		new MainController();
 	}
 
 }

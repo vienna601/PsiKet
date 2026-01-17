@@ -7,6 +7,14 @@ import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.glu.GLUquadric;
 
+/*
+ * This program is responsible for actually rendering the 3D
+ * sphere in the bloch frame. Using cartesian coordinates, tiny
+ * spheres can be added to the semi transparent bigger sphere.
+ * A quadric object is used to create the sphere so that calculations
+ * for geometric properties such as vertices can be handled by OpenGL.
+ * 
+ */
 public class SphereEventListener implements GLEventListener{
 	//objects needed for creating the sphere
     private final GLU glu = new GLU();
@@ -98,6 +106,7 @@ public class SphereEventListener implements GLEventListener{
         }
     }
 
+    //paints objects on screen
     @Override
     public void display(GLAutoDrawable drawable) {
     	//initialize the GL2 object that allows access to OpenGL methods
@@ -175,6 +184,7 @@ public class SphereEventListener implements GLEventListener{
         glu.gluSphere(quadric, 1.2, 48, 48);
     }
 
+    //runs when sphere panel is resized/reloaded
     @Override
     public void reshape(GLAutoDrawable drawable, int x, int y, int w, int h) {
     	//initialize the GL2 object that allows access to OpenGL methods
@@ -182,16 +192,21 @@ public class SphereEventListener implements GLEventListener{
     	//Applied_Programming/Introduction_to_Computer_Graphics_(Eck)/
     	//03%3A_OpenGL_1.1-_Geometry/3.06%3A_Using_GLUT_and_JOGL
         GL2 gl = drawable.getGL().getGL2();
-        //
+        //switch to projection matrix
         //Source: https://eng.libretexts.org/Bookshelves/Computer_Science/Applied_Programming/
         //Introduction_to_Computer_Graphics_(Eck)/03%3A_OpenGL_1.1-_Geometry/3.03%3A_Projection_and_Viewing
         gl.glMatrixMode(GL2.GL_PROJECTION);
+        //reset object position at origin
+        //source: https://stackoverflow.com/questions/628796/
+        //what-does-glloadidentity-do-in-opengl
         gl.glLoadIdentity();
-        //Source: https://registry.khronos.org/OpenGL-Refpages/gl2.1/xhtml/gluPerspective.xml
+        //maintain aspect ratio when resizing
+        //Sources: 
+        //- https://registry.khronos.org/OpenGL-Refpages/gl2.1/xhtml/gluPerspective.xml
+        //- https://stackoverflow.com/questions/16571981/gluperspective-parameters-what-do-they-mean
         float aspect = (float) w / (float) Math.max(h, 1);
         glu.gluPerspective(45.0, aspect, 0.1, 100.0);
-
-        //
+        //switch back to model view
         gl.glMatrixMode(GL2.GL_MODELVIEW);
     }
     

@@ -1,5 +1,10 @@
 package model;
 
+/*
+ * This class models a complex number object with a real
+ * and imaginary part, as well as utility methods such as
+ * add, multiply, and get conjugate.
+ */
 public class ComplexNumber implements VectorInterface{
 	//fields
 	private double realPart;

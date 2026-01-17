@@ -1,10 +1,7 @@
 package view;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
-
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -16,8 +13,15 @@ import javax.swing.ImageIcon;
 
 import controller.AssetsController;
 
-public class AlgorithmFrame extends JFrame implements MouseListener{
+/*
+ * This program is responsible for configuring
+ * the layout of the frame where the user can look
+ * at visualizations of major steps in Grover's algorithm.
+ */
+public class AlgorithmFrame extends JFrame{
 	//declare components
+	//check if frame is disposed
+	private boolean isDisposed = false;
 	private JLabel bgLabel;
 	private JLabel homeButton;
 	private JLabel stepLabel;
@@ -28,6 +32,69 @@ public class AlgorithmFrame extends JFrame implements MouseListener{
 	private JLabel nextButton;
 	private int curStep;
 	
+	//getters and setters for controller
+	public JLabel getHomeButton() {
+		return homeButton;
+	}
+
+	public void setHomeButton(JLabel homeButton) {
+		this.homeButton = homeButton;
+	}
+
+	public JLabel getStepLabel() {
+		return stepLabel;
+	}
+
+	public void setStepLabel(JLabel stepLabel) {
+		this.stepLabel = stepLabel;
+	}
+
+	public JLabel getStepImageLabel() {
+		return stepImageLabel;
+	}
+
+	public void setStepImageLabel(JLabel stepImageLabel) {
+		this.stepImageLabel = stepImageLabel;
+	}
+
+	public JLabel getExplanationLabel() {
+		return explanationLabel;
+	}
+
+	public void setExplanationLabel(JLabel explanationLabel) {
+		this.explanationLabel = explanationLabel;
+	}
+
+	public JLabel getBackButton() {
+		return backButton;
+	}
+
+	public void setBackButton(JLabel backButton) {
+		this.backButton = backButton;
+	}
+
+	public JLabel getNextButton() {
+		return nextButton;
+	}
+
+	public void setNextButton(JLabel nextButton) {
+		this.nextButton = nextButton;
+	}
+
+	public int getCurStep() {
+		return curStep;
+	}
+
+	public void setCurStep(int curStep) {
+		this.curStep = curStep;
+	}
+	public boolean isDisposed() {
+		return isDisposed;
+	}
+	public void setDisposed(boolean isDisposed) {
+		this.isDisposed = isDisposed;
+	}
+
 	//constructor
 	public AlgorithmFrame() {
 		//set to initial step
@@ -48,10 +115,7 @@ public class AlgorithmFrame extends JFrame implements MouseListener{
 		homeButton = new JLabel(new ImageIcon("src/main/assets/images/homeButton.png"));
 		backButton = new JLabel(new ImageIcon("src/main/assets/images/previousButton.png"));
 		nextButton = new JLabel(new ImageIcon("src/main/assets/images/nextButton2.png"));
-		//add mouse listener
-		homeButton.addMouseListener(this);
-		backButton.addMouseListener(this);
-		nextButton.addMouseListener(this);
+
 		//change to a hand cursor when the user hovers over the label
         //source: https://stackoverflow.com/questions/7359189/how-to-
 		//change-the-mouse-cursor-in-java
@@ -92,51 +156,11 @@ public class AlgorithmFrame extends JFrame implements MouseListener{
         pack();
         setVisible(true);
 	}
-
+	
+	//dispose the frame 
 	@Override
-	public void mouseClicked(MouseEvent e) {
-		//check if the home button was clicked
-		if((JLabel)e.getSource() == homeButton) {
-			//dispose current frame and open home
-			new HomeFrame();
-			this.dispose();
-		}
-		else if((JLabel)e.getSource() == backButton) {
-			//update step number with validation
-			curStep = Math.max(0, curStep-2);
-			//update labels
-			stepLabel.setText(AssetsController.getAlgorithmInfo()[curStep]);
-			stepImageLabel.setIcon(new ImageIcon("src/main/assets/images/step"+curStep/2+".gif"));
-			explanationLabel.setText(AssetsController.getAlgorithmInfo()[curStep+1]);
-			//reload 
-			stepImageLabel.revalidate();
-		}
-		else if((JLabel)e.getSource() == nextButton) {
-			//update step number with validation
-			curStep = Math.min(10, curStep + 2);
-			//update labels
-			stepLabel.setText(AssetsController.getAlgorithmInfo()[curStep]);
-			stepImageLabel.setIcon(new ImageIcon("src/main/assets/images/step"+curStep/2+".gif"));
-			explanationLabel.setText(AssetsController.getAlgorithmInfo()[curStep+1]);
-			//reload 
-			stepImageLabel.revalidate();
-		}
-	}
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-	}
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-	}
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
+	public void dispose() {
+		super.dispose();
+		setDisposed(true);
 	}
 }

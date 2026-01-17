@@ -1,5 +1,12 @@
 package model;
 
+/*
+ * This class defines the two constant basis objects
+ * that I will use throughout my project for various qubits.
+ */
+
+//Use enum for a set of constants
+//SOurce: https://www.baeldung.com/a-guide-to-java-enums
 public enum Basis {
 	//constants (separated with comma)
 	COMPUTATIONAL(new StateVector(1.0,0.0), new StateVector(0.0,1.0)),

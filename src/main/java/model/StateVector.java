@@ -1,5 +1,10 @@
 package model;
 
+/*
+ * This class models the state vector object with
+ * two vector components as well as utility methods 
+ * such as equals.
+ */
 public class StateVector {
 	//fields
 	//vector components in the state (2-dimensions in this case)

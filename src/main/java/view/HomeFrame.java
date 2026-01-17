@@ -15,8 +15,15 @@ import javax.swing.JPanel;
 
 import controller.AssetsController;
 
-public class HomeFrame extends JFrame implements MouseListener{
+/*
+ * This program is responsible for configuring the layout
+ * of the home frame where the user can choose which specific
+ * feature they want to access (e.g. bloch sphere, algorithms, etc.)
+ */
+public class HomeFrame extends JFrame{
 	//declare components
+	//check if already disposed
+	private boolean isDisposed = false;
 	private JLabel bgLabel;
 	private JLabel titleButton;
 	//create labels containing navigation headings
@@ -27,6 +34,30 @@ public class HomeFrame extends JFrame implements MouseListener{
 	//navigation panels
 	private JPanel[] navPanels;
 	
+	//getters and setters for controller to access components
+	public JLabel getTitleButton() {
+		return titleButton;
+	}
+
+	public void setTitleButton(JLabel titleButton) {
+		this.titleButton = titleButton;
+	}
+
+	public JPanel[] getNavPanels() {
+		return navPanels;
+	}
+
+	public void setNavPanels(JPanel[] navPanels) {
+		this.navPanels = navPanels;
+	}
+	public boolean isDisposed() {
+		return isDisposed;
+	}
+	public void setDisposed(boolean isDisposed) {
+		this.isDisposed = isDisposed;
+	}
+
+	//constructor
 	public HomeFrame() {
 		//create background label
 		bgLabel = new JLabel(new ImageIcon("src/main/assets/images/homeBg.jpg"));
@@ -34,8 +65,6 @@ public class HomeFrame extends JFrame implements MouseListener{
 		titleButton = new JLabel(new ImageIcon("src/main/assets/images/titleButton.png"));
 		//add tooltip
 		titleButton.setToolTipText("Back to Title Frame");
-		//add mouse listener
-		titleButton.addMouseListener(this);
 		//change the cursor to a hand cursor when the user hovers over the label
         //source: https://stackoverflow.com/questions/7359189/how-to-change-the-mouse-cursor-in-java
         titleButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -82,8 +111,6 @@ public class HomeFrame extends JFrame implements MouseListener{
         	//add components
         	navPanels[i].add(headingLabel);
         	navPanels[i].add(imageLabel);
-        	//add mouse listener
-        	navPanels[i].addMouseListener(this);
         	//add navigation panel to the main panel
         	mainPanel.add(navPanels[i]);
         }
@@ -107,58 +134,11 @@ public class HomeFrame extends JFrame implements MouseListener{
         pack();
         setVisible(true);
 	}
-
-
+	
+	//dispose the frame
 	@Override
-	public void mouseClicked(MouseEvent e) {
-		//check which frame the user wants to navigate to
-		//if the user clicked the title button
-		if(e.getSource() instanceof JLabel && (JLabel)e.getSource() == titleButton) {
-			//open the title frame and dispose the current frame
-			new TitleFrame();
-			this.dispose();
-		}
-		//if the user clicked the first panel
-		else if((JPanel)e.getSource() == navPanels[0]) {
-			//open the bloch frame and dispose the current frame
-			new BlochFrame();
-			this.dispose();
-		}
-		//if the user clicked the second panel
-		else if((JPanel)e.getSource() == navPanels[1]) {
-			//open the circuit frame and dispose the current frame
-			new CircuitFrame();
-			this.dispose();
-		}
-		//if the user clicked the third panel
-		else if((JPanel)e.getSource() == navPanels[2]) {
-			//open the algorithm frame and dispose the current frame
-			new AlgorithmFrame();
-			this.dispose();
-		}
-		//if the user clicked the last panel
-		else if((JPanel)e.getSource() == navPanels[3]) {
-			//open the resources frame and dispose the current frame
-			new ResourcesFrame();
-			this.dispose();
-		}
-	}
-
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		//unused method
-	}
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		//unused method
-	}
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		//unused method
-	}
-	@Override
-	public void mouseExited(MouseEvent e) {
-		//unused method
+	public void dispose() {
+		super.dispose();
+		setDisposed(true);
 	}
 }

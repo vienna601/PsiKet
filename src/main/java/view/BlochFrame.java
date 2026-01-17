@@ -27,8 +27,15 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
+/*
+ * This program is responsible for configuring the layout of 
+ * the frame where the user can customize qubit positions and
+ * view them on the rotatable bloch sphere.
+ */
 public class BlochFrame extends JFrame{
 	//declare components
+	//check if frame has been disposed
+	private boolean isDisposed = false;
 	private JLabel bgLabel;
 	private JLabel homeButton;
 	private JLabel curCoordsLabel;
@@ -130,6 +137,12 @@ public class BlochFrame extends JFrame{
 	}
 	public void setSpherePanel(GLJPanel spherePanel) {
 		this.spherePanel = spherePanel;
+	}
+	public boolean isDisposed() {
+		return isDisposed;
+	}
+	public void setDisposed(boolean isDisposed) {
+		this.isDisposed = isDisposed;
 	}
 
 	//constructor
@@ -293,7 +306,9 @@ public class BlochFrame extends JFrame{
 	}
 	
 	//dispose the frame
+	@Override
 	public void dispose() {
-		this.dispose();
+		super.dispose();
+		setDisposed(true);
 	}
 }

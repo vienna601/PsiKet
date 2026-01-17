@@ -28,10 +28,14 @@ import view.CircuitFrame;
 import view.CircuitImportFrame;
 import view.HomeFrame;
 
+/*
+ * This program is responsible for controlling the components
+ * of the circuit frame. It contains all the logic for actions
+ * such as adding and searching quantum gates.
+ */
 public class CircuitController implements MouseListener, KeyListener, ActionListener{
 	//declare fields
 	private CircuitFrame circuitFrame;
-	private CircuitImportFrame importFrame;
 	
 	//constructor
 	public CircuitController() {
@@ -47,53 +51,30 @@ public class CircuitController implements MouseListener, KeyListener, ActionList
 	public void setCircuitFrame() {
 		this.circuitFrame = new CircuitFrame();
 		//add mouse listener to buttons in tool bar
-		for(int i = 0; i < getCircuitFrame().getButtons().length; i++) 
-			getCircuitFrame().getButtons()[i].addMouseListener(this);
+		getCircuitFrame().getButtons()[1].addActionListener(this);
+		getCircuitFrame().getButtons()[3].addActionListener(this);
 		//add key listener to search field (detect when user hits enter
 		getCircuitFrame().getSearchField().addKeyListener(this);
 		
 		//add mouse llstener for porbability panel labels
-		for(int i = 0; i < getCircuitFrame().getProbLabels().length; i++) {
-			//check if the current label is a heading label or results label
-			if(i%2 != 0)
-				//add mouse listener
-				getCircuitFrame().getProbLabels()[i].addMouseListener(this);
-		}
+		getCircuitFrame().getProbLabels()[1].addMouseListener(this);
+		getCircuitFrame().getProbLabels()[3].addMouseListener(this);
 	}
 	
-	public CircuitImportFrame getImportFrame() {
-		return importFrame;
+	//method overload
+	public void setCircuitFrame(String name, String details) {
+		this.circuitFrame = new CircuitFrame(name, details);
+		//add mouse listener to buttons in tool bar
+		getCircuitFrame().getButtons()[1].addActionListener(this);
+		getCircuitFrame().getButtons()[3].addActionListener(this);
+		//add key listener to search field (detect when user hits enter
+		getCircuitFrame().getSearchField().addKeyListener(this);
+		
+		//add mouse llstener for porbability panel labels
+		getCircuitFrame().getProbLabels()[1].addMouseListener(this);
+		getCircuitFrame().getProbLabels()[3].addMouseListener(this);
 	}
-
-	public void setImportFrame() {
-		this.importFrame = new CircuitImportFrame();
-		//add mouse listeners
-		getImportFrame().getHomeButton().addMouseListener(this);
-		getImportFrame().getBackButton().addMouseListener(this);
-		//loop through the circuit info map in the import frame 
-		//object and create JLabels for displaying saved circuitss
-		//Source: https://stackoverflow.com/questions/1318980/how-to-iterate-over-a-treemap
-		for(Entry<String, String> entry : getImportFrame().getCircuitInfo().entrySet()) {
-			//add buffer space
-			getImportFrame().getInfoPanel().add(Box.createRigidArea(new Dimension(0,30)));
-			//set label text to contain key and value of map entry
-			JLabel label = new JLabel("<html>Circuit name: "+entry.getKey()+
-					"<br>Click to import!</html>");
-			label.setFont(new Font("Times New Roman",Font.PLAIN, 20));
-			label.setBackground(Color.white);
-			label.setOpaque(true);
-			label.addMouseListener(this);
-			//change to a hand cursor when the user hovers over the label
-	        //source: https://stackoverflow.com/questions/7359189/how-to-
-			//change-the-mouse-cursor-in-java
-			label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			getImportFrame().getInfoLabels().add(label);
-			//add to panel
-			label.setAlignmentX(Component.CENTER_ALIGNMENT);
-			getImportFrame().getInfoPanel().add(label);
-		}
-	}
-
+	
 	//utility methods
 	//gate search method
 	public ArrayList<Gate> gateSearch(String input){
@@ -234,7 +215,7 @@ public class CircuitController implements MouseListener, KeyListener, ActionList
 			if(getCircuitFrame().getCircuit().getQubit().isCollapsed())
 				JOptionPane.showMessageDialog(getCircuitFrame(), 
 						"State has been collapsed!\nRevert your measurement"+
-						"using the red button to measure again.",
+						"Use the red button to measure again.",
 						"Measurement error", JOptionPane.ERROR_MESSAGE);
 			else {
 				//store current state as previous state in circuit
@@ -287,59 +268,20 @@ public class CircuitController implements MouseListener, KeyListener, ActionList
 				}
 			}
 		}
-		//circuit import frame components
-		//check if the home button was clicked
-		else if((JLabel)e.getSource() == getImportFrame().getHomeButton()) {
-			//dispose the current frame and show the home frame
-			new HomeFrame();
-			getImportFrame().dispose();
-		}
-		//check if the back button was clicked
-		else if((JLabel)e.getSource() == getImportFrame().getBackButton()) {
-			//empty circuit
-			new CircuitFrame();
-			getImportFrame().dispose();
-		}
-		//check if an info label was clicked
-		else {
-			for(int i = 0; i < getImportFrame().getInfoLabels().size(); i++) 
-				//check if label was clicked
-				if((JLabel)e.getSource() == getImportFrame().getInfoLabels().get(i)) {
-					//get list of keys to get key value pair using index
-					//Source: https://www.tutorialspoint.com/how-to-get-
-					//treemap-key-or-value-using-index-in-java
-					ArrayList<String>keyList = new ArrayList(getImportFrame().getCircuitInfo().keySet());
-					String key = keyList.get(i);
-					//pass the key and value to the circuit frame constructor and
-					//dispose the current frame
-					new CircuitFrame(key,getImportFrame().getCircuitInfo().get(key));
-					getImportFrame().dispose();
-					//show success message
-					JOptionPane.showMessageDialog(getImportFrame(), 
-							"Circuit Imported!",
-							"Import success", JOptionPane.INFORMATION_MESSAGE);
-				}
-		}//end of else
 	}
 	
 	//tool bar buttons
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		//check which button was pressed
-		if(e.getSource() == getCircuitFrame().getButtons()[0]) {
-			//home frame and dispose current
-			new HomeFrame();
-			getCircuitFrame().dispose();
-		}
-		else if(e.getSource() == getCircuitFrame().getButtons()[1]) {
+		if(e.getSource() == getCircuitFrame().getButtons()[1]) {
 			//check if circuit name is empty or the default name
 			String name = getCircuitFrame().getNameField().getText().trim();
 			if(name.isEmpty() || name.equals("Enter Circuit Name")) {
 				//show error message
 				JOptionPane.showMessageDialog(getCircuitFrame(), 
-						"Name your circuit before saving!"+
-						"using the red button to measure again.",
-						"Measurement error", JOptionPane.ERROR_MESSAGE);
+						"Name your circuit before saving!",
+						"Saving error", JOptionPane.ERROR_MESSAGE);
 			}
 			else {
 				//save the names of the current gates
@@ -350,12 +292,11 @@ public class CircuitController implements MouseListener, KeyListener, ActionList
 				//call method from assets controller
 				AssetsController.saveCircuitToFile(name, getCircuitFrame()
 						.getCircuit().getQubit(), gateNames);
+				//show error message
+				JOptionPane.showMessageDialog(getCircuitFrame(), 
+						"Circuit saved!",
+						"Successful save", JOptionPane.INFORMATION_MESSAGE);
 			}
-		}
-		else if(e.getSource() == getCircuitFrame().getButtons()[2]) {
-			//import frame and dispose current
-			new CircuitImportFrame();
-			getCircuitFrame().dispose();
 		}
 		else if(e.getSource() == getCircuitFrame().getButtons()[3]) {
 			//revert to previous state
@@ -364,7 +305,10 @@ public class CircuitController implements MouseListener, KeyListener, ActionList
 			//clear probability panel labels
 			getCircuitFrame().getProbLabels()[1].setText("Press to calculate probabilities");
 			getCircuitFrame().getProbLabels()[3].setText("Press to measure state");
+			//reset isCollapsed
+			getCircuitFrame().getCircuit().getQubit().setCollapsed(false);
 		}
+		
 	}
 	
 	//unused methods below

@@ -21,8 +21,16 @@ import javax.swing.ImageIcon;
 
 import controller.AssetsController;
 
+/*
+ * This program is responsible for configuring the layout
+ * of the frame where the user can choose to import one of
+ * their saved circuits.
+ */
+
 public class CircuitImportFrame extends JFrame{
 	//declare components
+	//check if frame has been disposed
+	private boolean isDisposed = false;
 	//use an ordered map to load circuit information from file
 	private TreeMap<String,String> circuitInfo;
 	private ArrayList<JLabel> infoLabels;
@@ -64,6 +72,12 @@ public class CircuitImportFrame extends JFrame{
 	public void setInfoPanel(JPanel infoPanel) {
 		this.infoPanel = infoPanel;
 	}
+	public boolean isDisposed() {
+		return isDisposed;
+	}
+	public void setDisposed(boolean isDisposed) {
+		this.isDisposed = isDisposed;
+	}
 	
 	//constructor
 	public CircuitImportFrame() {
@@ -86,6 +100,8 @@ public class CircuitImportFrame extends JFrame{
 		//the controller will loop through the circuit info tree map and create
 		//JLabels for displaying information
 		
+		//initialize list
+		infoLabels = new ArrayList<JLabel>();
 		//add scroll bar
 		scroll = new JScrollPane(infoPanel, 
 				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
@@ -121,7 +137,9 @@ public class CircuitImportFrame extends JFrame{
 	}
 	
 	//dispose this frame
+	@Override
 	public void dispose() {
-		this.dispose();
+		super.dispose();
+		setDisposed(true);
 	}
 }
