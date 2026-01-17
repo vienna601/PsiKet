@@ -13,6 +13,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Map.Entry;
 
 import javax.swing.Box;
 import javax.swing.ImageIcon;
@@ -38,37 +39,62 @@ public class CircuitController implements MouseListener, KeyListener, ActionList
 		//until the user clicks on the corresponding button on the home frame
 	}
 	
-	//getters and setters
+	//getters and setters for frames
 	public CircuitFrame getCircuitFrame() {
 		return circuitFrame;
 	}
 
-	public void setCircuitFrame(CircuitFrame circuitFrame) {
-		this.circuitFrame = circuitFrame;
+	public void setCircuitFrame() {
+		this.circuitFrame = new CircuitFrame();
+		//add mouse listener to buttons in tool bar
+		for(int i = 0; i < getCircuitFrame().getButtons().length; i++) 
+			getCircuitFrame().getButtons()[i].addMouseListener(this);
+		//add key listener to search field (detect when user hits enter
+		getCircuitFrame().getSearchField().addKeyListener(this);
+		
+		//add mouse llstener for porbability panel labels
+		for(int i = 0; i < getCircuitFrame().getProbLabels().length; i++) {
+			//check if the current label is a heading label or results label
+			if(i%2 != 0)
+				//add mouse listener
+				getCircuitFrame().getProbLabels()[i].addMouseListener(this);
+		}
 	}
 	
 	public CircuitImportFrame getImportFrame() {
 		return importFrame;
 	}
 
-	public void setImportFrame(CircuitImportFrame importFrame) {
-		this.importFrame = importFrame;
+	public void setImportFrame() {
+		this.importFrame = new CircuitImportFrame();
+		//add mouse listeners
+		getImportFrame().getHomeButton().addMouseListener(this);
+		getImportFrame().getBackButton().addMouseListener(this);
+		//loop through the circuit info map in the import frame 
+		//object and create JLabels for displaying saved circuitss
+		//Source: https://stackoverflow.com/questions/1318980/how-to-iterate-over-a-treemap
+		for(Entry<String, String> entry : getImportFrame().getCircuitInfo().entrySet()) {
+			//add buffer space
+			getImportFrame().getInfoPanel().add(Box.createRigidArea(new Dimension(0,30)));
+			//set label text to contain key and value of map entry
+			JLabel label = new JLabel("<html>Circuit name: "+entry.getKey()+
+					"<br>Click to import!</html>");
+			label.setFont(new Font("Times New Roman",Font.PLAIN, 20));
+			label.setBackground(Color.white);
+			label.setOpaque(true);
+			label.addMouseListener(this);
+			//change to a hand cursor when the user hovers over the label
+	        //source: https://stackoverflow.com/questions/7359189/how-to-
+			//change-the-mouse-cursor-in-java
+			label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			getImportFrame().getInfoLabels().add(label);
+			//add to panel
+			label.setAlignmentX(Component.CENTER_ALIGNMENT);
+			getImportFrame().getInfoPanel().add(label);
+		}
 	}
 
 	//utility methods
-	//add gates to the GUI JPanel
-	public void addGateToGUI(Gate gate) {
-		//add the gate as an image button to the panel
-		JButton newGate = new JButton(new ImageIcon(gate.getImagePath()));
-		//change to a hand cursor when the user hovers over the label
-        //source: https://stackoverflow.com/questions/7359189/how-to-
-		//change-the-mouse-cursor-in-java
-		newGate.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		//add tooltip
-		newGate.setToolTipText("Click to learn more about the "+ gate.getName() + " gate!");
-		getCircuitFrame().getGatePanel().add(newGate);
-	}
-	
 	//gate search method
 	public ArrayList<Gate> gateSearch(String input){
 		//change to lower case for comparison later
@@ -212,9 +238,11 @@ public class CircuitController implements MouseListener, KeyListener, ActionList
 						"Measurement error", JOptionPane.ERROR_MESSAGE);
 			else {
 				//store current state as previous state in circuit
-				getCircuitFrame().getCircuit().setPrevState(getCircuitFrame().getCircuit().getQubit());
+				getCircuitFrame().getCircuit().setPrevState(
+						getCircuitFrame().getCircuit().getQubit());
 				//get the qubit in the circuit and measure its state
-				StateVector state = getCircuitFrame().getCircuit().getQubit().measure();
+				StateVector state = getCircuitFrame().getCircuit().
+						getQubit().measure();
 				//get the basis
 				Basis basis = Basis.COMPUTATIONAL;
 				if(getCircuitFrame().getBasisButton().isSelected())
@@ -259,6 +287,39 @@ public class CircuitController implements MouseListener, KeyListener, ActionList
 				}
 			}
 		}
+		//circuit import frame components
+		//check if the home button was clicked
+		else if((JLabel)e.getSource() == getImportFrame().getHomeButton()) {
+			//dispose the current frame and show the home frame
+			new HomeFrame();
+			getImportFrame().dispose();
+		}
+		//check if the back button was clicked
+		else if((JLabel)e.getSource() == getImportFrame().getBackButton()) {
+			//empty circuit
+			new CircuitFrame();
+			getImportFrame().dispose();
+		}
+		//check if an info label was clicked
+		else {
+			for(int i = 0; i < getImportFrame().getInfoLabels().size(); i++) 
+				//check if label was clicked
+				if((JLabel)e.getSource() == getImportFrame().getInfoLabels().get(i)) {
+					//get list of keys to get key value pair using index
+					//Source: https://www.tutorialspoint.com/how-to-get-
+					//treemap-key-or-value-using-index-in-java
+					ArrayList<String>keyList = new ArrayList(getImportFrame().getCircuitInfo().keySet());
+					String key = keyList.get(i);
+					//pass the key and value to the circuit frame constructor and
+					//dispose the current frame
+					new CircuitFrame(key,getImportFrame().getCircuitInfo().get(key));
+					getImportFrame().dispose();
+					//show success message
+					JOptionPane.showMessageDialog(getImportFrame(), 
+							"Circuit Imported!",
+							"Import success", JOptionPane.INFORMATION_MESSAGE);
+				}
+		}//end of else
 	}
 	
 	//tool bar buttons

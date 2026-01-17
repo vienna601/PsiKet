@@ -21,7 +21,7 @@ import javax.swing.ImageIcon;
 
 import controller.AssetsController;
 
-public class CircuitImportFrame extends JFrame implements MouseListener{
+public class CircuitImportFrame extends JFrame{
 	//declare components
 	//use an ordered map to load circuit information from file
 	private TreeMap<String,String> circuitInfo;
@@ -33,15 +33,45 @@ public class CircuitImportFrame extends JFrame implements MouseListener{
 	private JPanel infoPanel;
 	private JScrollPane scroll;
 	
+	//getters and setters for circuit controller to access components
+	public ArrayList<JLabel> getInfoLabels() {
+		return infoLabels;
+	}
+	public void setInfoLabels(ArrayList<JLabel> infoLabels) {
+		this.infoLabels = infoLabels;
+	}
+	public JLabel getHomeButton() {
+		return homeButton;
+	}
+	public void setHomeButton(JLabel homeButton) {
+		this.homeButton = homeButton;
+	}
+	public JLabel getBackButton() {
+		return backButton;
+	}
+	public void setBackButton(JLabel backButton) {
+		this.backButton = backButton;
+	}
+	public TreeMap<String, String> getCircuitInfo() {
+		return circuitInfo;
+	}
+	public void setCircuitInfo(TreeMap<String, String> circuitInfo) {
+		this.circuitInfo = circuitInfo;
+	}
+	public JPanel getInfoPanel() {
+		return infoPanel;
+	}
+	public void setInfoPanel(JPanel infoPanel) {
+		this.infoPanel = infoPanel;
+	}
+	
 	//constructor
 	public CircuitImportFrame() {
 		//create background label
 		bgLabel = new JLabel(new ImageIcon("src/main/assets/images/importBg.jpg"));
 		//create button labels
 		homeButton = new JLabel(new ImageIcon("src/main/assets/images/homeButton.png"));
-		homeButton.addMouseListener(this);
 		backButton = new JLabel(new ImageIcon("src/main/assets/images/backButton.png"));
-		backButton.addMouseListener(this);
 		//create the title label
 		titleLabel = new JLabel("Saved Circuits");
 		titleLabel.setFont(new Font("Times New Roman",Font.BOLD, 40));
@@ -53,28 +83,8 @@ public class CircuitImportFrame extends JFrame implements MouseListener{
 		infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
 		//initialize the map using the method in the assets controller
 		circuitInfo = AssetsController.loadCircuits();
-		//loop through the map and create JLabels
-		//Source: https://stackoverflow.com/questions/1318980/how-to-iterate-over-a-treemap
-		infoLabels = new ArrayList<JLabel>();
-		for(Entry<String, String> entry : circuitInfo.entrySet()) {
-			//add buffer space
-			infoPanel.add(Box.createRigidArea(new Dimension(0,30)));
-			//set label text to contain key and value of map entry
-			JLabel label = new JLabel("<html>Circuit name: "+entry.getKey()+
-					"<br>Click to import!</html>");
-			label.setFont(new Font("Times New Roman",Font.PLAIN, 20));
-			label.setBackground(Color.white);
-			label.setOpaque(true);
-			label.addMouseListener(this);
-			//change to a hand cursor when the user hovers over the label
-	        //source: https://stackoverflow.com/questions/7359189/how-to-
-			//change-the-mouse-cursor-in-java
-			label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			infoLabels.add(label);
-			//add to panel
-			label.setAlignmentX(CENTER_ALIGNMENT);
-            infoPanel.add(label);
-		}
+		//the controller will loop through the circuit info tree map and create
+		//JLabels for displaying information
 		
 		//add scroll bar
 		scroll = new JScrollPane(infoPanel, 
@@ -82,6 +92,7 @@ public class CircuitImportFrame extends JFrame implements MouseListener{
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		//increase scroll speed
 		scroll.getVerticalScrollBar().setUnitIncrement(15);
+		//make the background transparent
 		scroll.setOpaque(false);
 		infoPanel.setBackground(new Color(0,0,0,0));
 		
@@ -108,60 +119,9 @@ public class CircuitImportFrame extends JFrame implements MouseListener{
         pack();
         setVisible(true);
 	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		//check if the home button was clicked
-		if((JLabel)e.getSource() == homeButton) {
-			//dispose the current frame and show the home frame
-			new HomeFrame();
-			this.dispose();
-		}
-		//check if the back button was clicked
-		else if((JLabel)e.getSource() == backButton) {
-			//empty circuit
-			new CircuitFrame();
-			this.dispose();
-		}
-		//check if an info label was clicked
-		else {
-			for(int i = 0; i < infoLabels.size(); i++) 
-				//check if label was clicked
-				if((JLabel)e.getSource() == infoLabels.get(i)) {
-					//get list of keys to get key value pair using index
-					//Source: https://www.tutorialspoint.com/how-to-get-
-					//treemap-key-or-value-using-index-in-java
-					ArrayList<String>keyList = new ArrayList(circuitInfo.keySet());
-					String key = keyList.get(i);
-					//pass the key and value to the circuit frame constructor and
-					//dispose the current frame
-					new CircuitFrame(key,circuitInfo.get(key));
-					this.dispose();
-					//show success message
-					JOptionPane.showMessageDialog(this, 
-							"Circuit Imported!",
-							"Import success", JOptionPane.INFORMATION_MESSAGE);
-				}
-		}//end of else
-	}
 	
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
+	//dispose this frame
+	public void dispose() {
+		this.dispose();
 	}
 }
